@@ -38,18 +38,31 @@ int SLInsert(SortedListPtr list, void *newObj){
   new->data = newObj;
   new->refcount = 1;
 
+    int j = 2;
+    void * pj = &j;
+    if(list->cf(pj,pj)==0){
+      printf("pj: %p\n", pj);
+    }
+
 
   if(list->head==NULL){
     printf("Empty\n");
     list->head = malloc(sizeof(Node));
-    (list->head)->next = new;
+    list->head = new;
     printf("%p  %d\n",new->data, *((int*)new->data));
     SortedListIteratorPtr sp = SLCreateIterator(list); 
     printf("sp: %p\n",sp);
     return 1;
   }
   else{
-    
+    //Checks comparator function for value
+    /*if( list->cf(,) ){
+      return 0;
+    }
+    else{
+      
+    }*/
+
   }
 
 
@@ -74,6 +87,8 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
     return NULL;
   }
   else{
+    (sp->curr)->refcount++;
+    printf("iter: %d  refcount:%d \n", *((int*)(sp->curr)->data), (sp->curr)->refcount );
     return sp;
   }
 }

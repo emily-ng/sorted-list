@@ -29,6 +29,7 @@ struct SortedListIterator
   Node* right;
   Node* curr;
 };
+
 typedef struct SortedListIterator* SortedListIteratorPtr;
 
 typedef int (*CompareFuncT)( void *, void * );

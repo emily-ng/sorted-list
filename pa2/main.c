@@ -20,9 +20,10 @@ int main(int argc, char**argv){
   printf("check2\n");
   int k = 10;
   void* ob1 = &k;
-
+ 
+  int j = 8;
   void* ob2 = malloc(sizeof(int));
-  ob2 = &k;
+  ob2 = &j;
 
   SLInsert(list,ob1);
   
