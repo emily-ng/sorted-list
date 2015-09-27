@@ -14,22 +14,35 @@ void destroyer (void* a){
 }
 
 int main(int argc, char**argv){
-  printf("check1\n");
+ 
   SortedListPtr list = SLCreate(compInts,destroyer);
  
-  printf("check2\n");
   int k = 10;
-  void* ob1 = &k;
+  void* ob1 = malloc(sizeof(int));
+  ob1 = &k;
  
   int j = 8;
   void* ob2 = malloc(sizeof(int));
   ob2 = &j;
 
+  int m = 5;
+  void* ob3 = malloc(sizeof(int));
+  ob3 = &m;
+
+  int n = 6;
+  void* ob4 = malloc(sizeof(int));
+  ob4 = &n;
+ 
   SLInsert(list,ob1);
   
   SLInsert(list,ob2);
 
+  SLInsert(list,ob3);
+  
+  SLInsert(list,ob4);
+
   SLDestroy(list);
 
   return 0;
-}
+
+ }

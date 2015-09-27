@@ -32,42 +32,74 @@ void SLDestroy(SortedListPtr list){
 
 //TODO
 int SLInsert(SortedListPtr list, void *newObj){
+  // Node* temp1 = malloc(sizeof(Node));
+  // Node* temp2 = malloc(sizeof(Node));
   
   Node* new = malloc(sizeof(Node));
   new->next = NULL;
   new->data = newObj;
   new->refcount = 1;
-
-    int j = 2;
-    void * pj = &j;
-    if(list->cf(pj,pj)==0){
-      printf("pj: %p\n", pj);
-    }
-
-
+  
+  SortedListIteratorPtr iter = SLCreateIterator(list); 
+  
   if(list->head==NULL){
-    printf("Empty\n");
     list->head = malloc(sizeof(Node));
     list->head = new;
     printf("%p  %d\n",new->data, *((int*)new->data));
-    SortedListIteratorPtr sp = SLCreateIterator(list); 
-    printf("sp: %p\n",sp);
+    
     return 1;
   }
+ 
+  //Checks comparator function for value
+   
+   
   else{
-    //Checks comparator function for value
-    /*if( list->cf(,) ){
-      return 0;
+  
+    printf("%p  %d\n",new->data, *((int*)new->data));
+    if(SLNextItem(iter)==NULL){
+      (list->head)->next = new;   
     }
     else{
-      
-    }*/
 
+      while(SLNextItem(iter)!=NULL){
+      
+	if(list->cf(new->data,SLGetItem(iter))==0){
+	  printf("equal\n");
+	  return 0;
+	}
+	else if( (list->cf(new->data,SLGetItem(iter))) <0 && (list->cf(new->data,SLNextItem(iter)))>0 ){
+	  printf("New Data is Less Than iter->curr ---- INSERTING\n");
+	  new->next = (iter->curr)->next;
+	  (iter->curr)->next = new;
+
+	}
+	else{
+	  printf("New Data is Greater Than iter->curr\n");
+	}
+	printf("iter->curr: %d\n",*((int*)(iter->curr)->data ) );
+	(iter->curr)->refcount--;
+	iter->curr = (iter->curr)->next;
+	printf("iter->curr2: %d\n",*((int*)(iter->curr)->data ) );
+   	(iter->curr)->refcount++;
+      }
+      printf("break\n");
+      // (iter->curr)->next = new; 
+
+    }  
+  
+    
+
+  }        
+  
+  Node *checker = malloc(sizeof(Node));
+  checker = list->head;
+  while(checker!=NULL){
+    printf("checker: %d\n", *((int*)checker->data) );
+    checker = checker->next;
   }
 
-
-  return 1;
-
+  printf("\n");
+  return 0;
 
 }
 
@@ -81,14 +113,18 @@ int SLRemove(SortedListPtr list, void *newObj){
 //TODO
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
   SortedListIteratorPtr sp = malloc(sizeof(SortedListIteratorPtr));  
+  Node* tempcurr = malloc(sizeof(Node));
+  // Node * templeft = malloc(sizeof(Node));
+  // Node* tempright = malloc(sizeof(Node));
+  tempcurr = list->head;
   sp->curr = list->head;
-  if(sp->curr==NULL){
+  if(tempcurr==NULL){
     printf("iter is NULL\n");
     return NULL;
   }
   else{
-    (sp->curr)->refcount++;
-    printf("iter: %d  refcount:%d \n", *((int*)(sp->curr)->data), (sp->curr)->refcount );
+    tempcurr->refcount++; 
+    // printf("iter: %d  refcount:%d \n", *((int*)tempcurr->data), tempcurr->refcount );
     return sp;
   }
 }
@@ -99,8 +135,14 @@ void SLDestroyIterator(SortedListIteratorPtr iter){
 
 //TODO
 void * SLGetItem( SortedListIteratorPtr iter ){
-  
-  return NULL;
+  if(iter->curr==NULL){
+    printf("get NULL\n");
+    return 0;
+  }
+  else{
+     printf("get item: %d\n", *((int*)(iter->curr)->data) );
+    return (iter->curr)->data;
+  }
 }
 
 //TODO
@@ -109,6 +151,12 @@ void * SLNextItem(SortedListIteratorPtr iter){
     return NULL;
   }
   else{
-    return iter->right;
+    //might be an issue??
+    if((iter->curr)->next != NULL){
+      return ((iter->curr)->next)->data;
+    }
+    else{
+      return NULL;
+    }
   }
 }
