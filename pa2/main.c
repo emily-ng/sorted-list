@@ -6,15 +6,7 @@ int compInts (void* a, void* b){
   int i = *(int*)a;
   int j = *(int*)b;
 
-  if(i==j){
-    return 0;
-  }
-  else if (i>j){
-    return 1;
-  }
-  else {
-    return -1;
-  }
+  return (i-j);
 }
 
 void destroyer (void* a){
@@ -22,16 +14,19 @@ void destroyer (void* a){
 }
 
 int main(int argc, char**argv){
-  
+  printf("check1\n");
   SortedListPtr list = SLCreate(compInts,destroyer);
-  
-  void* ob1 = 1;
-  void* obj2 = 2;
-  void* obj3 =3;
+ 
+  printf("check2\n");
+  int k = 10;
+  void* ob1 = &k;
+
+  void* ob2 = malloc(sizeof(int));
+  ob2 = &k;
 
   SLInsert(list,ob1);
+  
   SLInsert(list,ob2);
-  SLInsert(list, ob3);
 
   SLDestroy(list);
 

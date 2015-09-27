@@ -7,32 +7,35 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-struct Object_{
+struct Node_{
   void* data;
-  struct Object_* next;
+  struct Node_* next;
+  int refcount;
 };
-typedef struct Object_ Object;
+typedef struct Node_ Node;
 
 struct SortedList
 {
-  Object* head;
+  Node* head;
   int (*cf)(void*, void*);
-  int list_length;
+  int (*df)(void*);
 };
 typedef struct SortedList* SortedListPtr;
 
 //left is greater than; right is less than
 struct SortedListIterator
 {
-  Object* left;
-  Object* right;
-  Object* curr;
+  Node* left;
+  Node* right;
+  Node* curr;
 };
 typedef struct SortedListIterator* SortedListIteratorPtr;
 
 typedef int (*CompareFuncT)( void *, void * );
 
 typedef void (*DestructFuncT)( void * );
+
+int compInts(void* a, void* b);
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
