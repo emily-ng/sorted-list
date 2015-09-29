@@ -33,6 +33,10 @@ int main(int argc, char**argv){
   void* ob4 = malloc(sizeof(int));
   ob4 = &n;
  
+  int o = 3;
+  void* ob5 = malloc(sizeof(int));
+  ob5 = &o;
+
   SLInsert(list,ob1);
   
   SLInsert(list,ob2);
@@ -40,6 +44,18 @@ int main(int argc, char**argv){
   SLInsert(list,ob3);
   
   SLInsert(list,ob4);
+  
+  SLInsert(list, ob5);
+
+
+ Node *checker = malloc(sizeof(Node));                                                                                                               
+  checker = list->head;                                                                                                                                   
+  while(checker!=NULL){                                                                                                                                   
+    printf("checker: %d\n", *((int*)checker->data) );
+    checker = checker->next;                                                                                                                              
+  }                                                                                                                                                    
+ 
+
 
   SLDestroy(list);
 
