@@ -30,7 +30,8 @@ void destroyer (void* a){
 int main(int argc, char**argv){
  
   SortedListPtr list = SLCreate(compInts,destroyer);
- 
+  //  SortedListIteratorPtr iter = SLCreateIterator(list);
+
   int k = 10;
   int* ob1 = malloc(sizeof(int*));
   ob1= &k;
@@ -64,19 +65,19 @@ int main(int argc, char**argv){
   
    SLInsert(list,ob3);
   
-  SLInsert(list,ob2);
-  SLInsert(list,ob2);
   SLInsert(list,ob3);
+   SLInsert(list,ob2);
+   SLInsert(list,ob1);
 
    SLInsert(list,ob1);
 
-  SLInsert(list,ob2);
+   /*SLInsert(list,ob2);
    
    SLInsert(list,ob4);
   
    SLInsert(list,ob6);
    SLInsert(list,ob2);
-  
+  */ 
    /*
   SLInsert(list,ob5);
   
@@ -87,7 +88,7 @@ int main(int argc, char**argv){
  Node *checker = malloc(sizeof(Node));                                                                                                               
   checker = list->head;                                                                                                                                   
   while(checker!=NULL){                                                                                                                                   
-    printf("checker: %d\n", *((int*)checker->data) );
+    printf("checker:%d  ref:%d\n", *((int*)checker->data),checker->refcount );
     checker = checker->next;                                                                                                                              
   }                                                                                                                                                    
  

@@ -44,8 +44,8 @@ int SLInsert(SortedListPtr list, void *newObj){
 
   if(list->head==NULL){
     printf("CREATE HEAD\n");
+    //pointer to new node
     list->head = malloc(sizeof(Node));
-    //    printf("head size: %lu\n", sizeof(list->head));
     list->head = new;
     (list->head)->refcount++;
     printf("r:%d\n",(list->head)->refcount);
@@ -57,6 +57,7 @@ int SLInsert(SortedListPtr list, void *newObj){
     //AddToFront ---NEEDED
     if( list->cf(new->data,(list->head)->data)==0  ){
        printf("EQUAL to head\n");
+       // (iter->curr)->refcount--;
       return 0;
     }
     else if( list->cf(new->data,(list->head)->data)>0 ){
@@ -68,29 +69,48 @@ int SLInsert(SortedListPtr list, void *newObj){
     else{
       while(( iter->curr)->next!=NULL){
 	if( list->cf(new->data,((iter->curr)->next)->data)==0 ){
-	  printf("EQUAL to a node\n");
+	  printf("EQUAL to the next node from iter\n");
+	  //REMOVE ITERATOR
+	  (iter->curr)->refcount--;
 	  return 0;
 	  }
 	else if(list->cf(new->data,((iter->curr)->next)->data)>0){
 	  printf("INSERT IN BETWEEN NODES\n");
 	  new->next  = (iter->curr)->next;
+	  ((iter->curr)->next)->refcount++;
 	  (iter->curr)->next = new;
-	return 1;
+	  new->refcount++;
+	  (iter->curr)->refcount--;
+	  return 1;
 	}
 	else{
+	 //Next is greater, advance iterator
+	  printf("ADVANCE\n");
+	 (iter->curr)->refcount--;
 	 iter->curr = (iter->curr)->next;
+	 (iter->curr)->refcount++;
 	}
+	//(iter->curr)->refcount--;
 	
       }
       //Reaches end, less than rest of list
         (iter->curr)->next = new;
+	//printf("check3pls\n");
+	((iter->curr)->next)->refcount++;
+	//printf("c5\n");
+	(iter->curr)->refcount--;
+	//printf("c6\n");
+	iter->curr = (iter->curr)->next;
+	//printf("c7\n");
+	(iter->curr)->refcount++;
+	
 	printf("ADD TO END\n");
 	return 1;
 
     }
        
 
-  }        
+  }    
   
   // printf("\n");
   //return 0;
@@ -108,8 +128,6 @@ int SLRemove(SortedListPtr list, void *newObj){
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
   SortedListIteratorPtr sp = malloc(sizeof(SortedListIteratorPtr));  
   Node* tempcurr = malloc(sizeof(Node));
-  // Node * templeft = malloc(sizeof(Node));
-  // Node* tempright = malloc(sizeof(Node));
   tempcurr = list->head;
   sp->curr = list->head;
   if(tempcurr==NULL){
@@ -118,13 +136,14 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
   }
   else{
     tempcurr->refcount++; 
-    // printf("iter: %d  refcount:%d \n", *((int*)tempcurr->data), tempcurr->refcount );
     return sp;
   }
 }
 
 //TODO
 void SLDestroyIterator(SortedListIteratorPtr iter){
+  free(iter->curr);
+  free(iter);
 }
 
 //TODO
