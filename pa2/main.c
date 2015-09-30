@@ -8,6 +8,18 @@ int compInts (void* a, void* b){
 
   return (i-j);
 }
+int compDoubles (void* a, void* b){
+  double i = *(double*)a;
+  double j = *(double*)b;
+
+  return (i-j);
+}
+int compFloats (void* a, void* b){
+  float i = *(float*)a;
+  float j = *(float*)b;
+
+  return (i-j);
+}
 
 void destroyer (void* a){
   free(a);
@@ -33,20 +45,29 @@ int main(int argc, char**argv){
   void* ob4 = malloc(sizeof(int));
   ob4 = &n;
  
-  int o = 3;
+  int o = 11;
   void* ob5 = malloc(sizeof(int));
   ob5 = &o;
 
-  SLInsert(list,ob1);
-  
-  SLInsert(list,ob2);
+  int q = 9;
+  void* ob6 = malloc(sizeof(int));
+  ob6 = &q;
 
-  SLInsert(list,ob3);
+   SLInsert(list,ob1);
+  
+  SLInsert(list,ob1);
+
+   SLInsert(list,ob2);
+
+   SLInsert(list,ob3);
+  
+  SLInsert(list,ob6);
+  
+  SLInsert(list,ob5);
+  
+  SLInsert(list, ob6);
   
   SLInsert(list,ob4);
-  
-  SLInsert(list, ob5);
-
 
  Node *checker = malloc(sizeof(Node));                                                                                                               
   checker = list->head;                                                                                                                                   

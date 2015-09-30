@@ -34,6 +34,7 @@ void SLDestroy(SortedListPtr list){
 int SLInsert(SortedListPtr list, void *newObj){
   // Node* temp1 = malloc(sizeof(Node));
   // Node* temp2 = malloc(sizeof(Node));
+  printf("\n");
   printf("NEW INSERT\n");
   Node* new = malloc(sizeof(Node));
   new->next = NULL;
@@ -41,60 +42,59 @@ int SLInsert(SortedListPtr list, void *newObj){
   new->refcount = 1;
   
   SortedListIteratorPtr iter = SLCreateIterator(list); 
-  
+  printf("Input:  %d\n", *((int*)new->data));
+
   if(list->head==NULL){
+    printf("CREATE HEAD\n");
     list->head = malloc(sizeof(Node));
     list->head = new;
-    printf("pnull: %p  %d\n",new->data, *((int*)new->data));
-
     return 1;
   }
  
-  //Checks comparator function for value
-   
-   
+  //Checks comparator function for value 
   else{
-    printf("iter->curr??: %d\n",*((int*)(iter->curr)->data ) );
-    printf("p: %p  %d\n",new->data, *((int*)new->data));
-
-    if( (iter->curr)->next==NULL){
-      printf("NextItem is NULL\n");
-      // (list->head)->next = new; 
-      (iter->curr)->next = new;
-      iter->curr = (iter->curr)->next;
-      printf("iter->curr next: %d\n",*((int*)(iter->curr)->data ) );
-      printf("\n");
-      return 1;
+    //AddToFront
+    if( *( (int*)((list->head)->data) ) == *((int*)(new->data))  ){
+       printf("Equal to head\n");
+      return 0;
     }
+    else if( *( (int*)((list->head)->data) ) < *((int*)(new->data)) ){
+          printf("GREATER THAN HEAD\n");
+	  new->next = list->head;
+	  list->head = new;
+	  return 1;
+     }
     else{
-      while( (iter->curr)->next!=NULL){
-	 printf("ELSE iter->curr is now: %d\n",*((int*)(iter->curr)->data ) );
-	if( *( (int*)(((iter->curr)->next)->data) ) < *((int*)(new->data))   ){
-	new->next  = (iter->curr)->next;
-	(iter->curr)->next = new;
+      while(( iter->curr)->next!=NULL){
+	// printf("iter->curr: %d\n",*((int*)(iter->curr)->data ) );
+	// printf("iter->next: %d\n",*( (int*)(SLNextItem(iter)) ) );
+	 if( *( (int*)(((iter->curr)->next)->data) ) ==  *((int*)(new->data))){
+	  printf("EQUAL to a node\n");
+	  return 0;
+	  }
+	else if( *( (int*)(((iter->curr)->next)->data) ) < *((int*)(new->data))   ){
+	  printf("INSERT IN BETWEEN NODES\n");
+	  new->next  = (iter->curr)->next;
+	  (iter->curr)->next = new;
 	return 1;
 	}
-	//	 printf("ELSE iter->curr is now: %d\n",*((int*)(iter->curr)->data ) );
+	else{
 	 iter->curr = (iter->curr)->next;
+	}
+	
       }
-         (iter->curr)->next = new;
-	 //return 1;
-     
-    }  
-  
-    
+      //Reaches end, less than rest of list
+        (iter->curr)->next = new;
+	printf("STUCK ON THE END\n");
+	return 1;
+
+    }
+       
 
   }        
   
-  /*  Node *checker = malloc(sizeof(Node));
-  checker = list->head;
-  while(checker!=NULL){
-    printf("checker: %d\n", *((int*)checker->data) );
-    checker = checker->next;
-  }
-  */
-  printf("\n");
-  return 0;
+  // printf("\n");
+  //return 0;
 
 }
 
