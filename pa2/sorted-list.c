@@ -32,14 +32,12 @@ void SLDestroy(SortedListPtr list){
 
 //TODO
 int SLInsert(SortedListPtr list, void *newObj){
-  // Node* temp1 = malloc(sizeof(Node));
-  // Node* temp2 = malloc(sizeof(Node));
   printf("\n");
   printf("NEW INSERT\n");
   Node* new = malloc(sizeof(Node));
   new->next = NULL;
   new->data = newObj;
-  new->refcount = 1;
+  new->refcount = 0;
   
   SortedListIteratorPtr iter = SLCreateIterator(list); 
   printf("Input:  %d\n", *((int*)new->data));
@@ -47,18 +45,21 @@ int SLInsert(SortedListPtr list, void *newObj){
   if(list->head==NULL){
     printf("CREATE HEAD\n");
     list->head = malloc(sizeof(Node));
+    //    printf("head size: %lu\n", sizeof(list->head));
     list->head = new;
+    (list->head)->refcount++;
+    printf("r:%d\n",(list->head)->refcount);
     return 1;
   }
  
   //Checks comparator function for value 
   else{
-    //AddToFront
-    if( *( (int*)((list->head)->data) ) == *((int*)(new->data))  ){
-       printf("Equal to head\n");
+    //AddToFront ---NEEDED
+    if( list->cf(new->data,(list->head)->data)==0  ){
+       printf("EQUAL to head\n");
       return 0;
     }
-    else if( *( (int*)((list->head)->data) ) < *((int*)(new->data)) ){
+    else if( list->cf(new->data,(list->head)->data)>0 ){
           printf("GREATER THAN HEAD\n");
 	  new->next = list->head;
 	  list->head = new;
@@ -66,13 +67,11 @@ int SLInsert(SortedListPtr list, void *newObj){
      }
     else{
       while(( iter->curr)->next!=NULL){
-	// printf("iter->curr: %d\n",*((int*)(iter->curr)->data ) );
-	// printf("iter->next: %d\n",*( (int*)(SLNextItem(iter)) ) );
-	 if( *( (int*)(((iter->curr)->next)->data) ) ==  *((int*)(new->data))){
+	if( list->cf(new->data,((iter->curr)->next)->data)==0 ){
 	  printf("EQUAL to a node\n");
 	  return 0;
 	  }
-	else if( *( (int*)(((iter->curr)->next)->data) ) < *((int*)(new->data))   ){
+	else if(list->cf(new->data,((iter->curr)->next)->data)>0){
 	  printf("INSERT IN BETWEEN NODES\n");
 	  new->next  = (iter->curr)->next;
 	  (iter->curr)->next = new;
@@ -85,7 +84,7 @@ int SLInsert(SortedListPtr list, void *newObj){
       }
       //Reaches end, less than rest of list
         (iter->curr)->next = new;
-	printf("STUCK ON THE END\n");
+	printf("ADD TO END\n");
 	return 1;
 
     }
