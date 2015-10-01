@@ -36,7 +36,6 @@ int main(int argc, char**argv){
   int* ob1 = malloc(sizeof(int*));
   ob1= &k;
   // *ob1 = k;
-  //  printf("p!!: %p %d\n", ob1, *ob1);
  
   int j = 8;
   int* ob2 = malloc(sizeof(int));
@@ -62,14 +61,30 @@ int main(int argc, char**argv){
   int* ob6 = malloc(sizeof(int));
   ob6 = &q;
   //  *ob6 = q;
-  
+
    SLInsert(list,ob3);
   
-  SLInsert(list,ob3);
    SLInsert(list,ob2);
-   SLInsert(list,ob1);
+   SLInsert(list,ob2);
+    SLInsert(list,ob1);
+    SLInsert(list,ob4);
+ Node *checker = malloc(sizeof(Node));                                                                                                               
+  checker = list->head;                                                                                                                                   
+  while(checker!=NULL){                                                                                                                                   
+    printf("checker:%d  ref:%d\n", *((int*)checker->data),checker->refcount );
+    checker = checker->next;                                                                                                                              
+  }                                                                                                                               
+  
+  SortedListIteratorPtr iter = SLCreateIterator(list);
+   printf("hey\n");
 
-   SLInsert(list,ob1);
+    while(SLNextItem(iter)!=NULL){
+       //       printf("hi\n");
+       printf("d:%d\n",*((int*)(iter->curr)->data));
+       iter->curr = iter->right;
+       iter->right = (iter->curr)->next;
+    }
+  
 
    /*SLInsert(list,ob2);
    
@@ -85,13 +100,16 @@ int main(int argc, char**argv){
   
   SLInsert(list,ob4);
    */
- Node *checker = malloc(sizeof(Node));                                                                                                               
+
+     //   printf("ABOUT TO PRINT\n");
+
+   /* Node *checker = malloc(sizeof(Node));                                                                                                               
   checker = list->head;                                                                                                                                   
   while(checker!=NULL){                                                                                                                                   
     printf("checker:%d  ref:%d\n", *((int*)checker->data),checker->refcount );
     checker = checker->next;                                                                                                                              
   }                                                                                                                                                    
- 
+   */
 
 
   SLDestroy(list);

@@ -18,14 +18,14 @@ struct SortedList
 {
   Node* head;
   int (*cf)(void*, void*);
-  int (*df)(void*);
+  void (*df)(void*);
 };
 typedef struct SortedList* SortedListPtr;
 
 //left is greater than; right is less than
 struct SortedListIterator
 {
-  Node* left;
+  // Node* left;
   Node* right;
   Node* curr;
 };
@@ -35,8 +35,6 @@ typedef struct SortedListIterator* SortedListIteratorPtr;
 typedef int (*CompareFuncT)( void *, void * );
 
 typedef void (*DestructFuncT)( void * );
-
-int compInts(void* a, void* b);
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df);
 
