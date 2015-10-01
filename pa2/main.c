@@ -68,6 +68,7 @@ int main(int argc, char**argv){
    SLInsert(list,ob2);
     SLInsert(list,ob1);
     SLInsert(list,ob4);
+
  Node *checker = malloc(sizeof(Node));                                                                                                               
   checker = list->head;                                                                                                                                   
   while(checker!=NULL){                                                                                                                                   
@@ -79,10 +80,11 @@ int main(int argc, char**argv){
    printf("hey\n");
 
     while(SLNextItem(iter)!=NULL){
-       //       printf("hi\n");
-       printf("d:%d\n",*((int*)(iter->curr)->data));
-       iter->curr = iter->right;
+
+        printf("d:%d\n",*((int*)(iter->curr)->data));
+	/* iter->curr = iter->right;
        iter->right = (iter->curr)->next;
+      */
     }
   
 

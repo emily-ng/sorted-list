@@ -159,19 +159,20 @@ void * SLGetItem( SortedListIteratorPtr iter ){
 
 //TODO
 void * SLNextItem(SortedListIteratorPtr iter){
-  printf("NEXT\n");
-  if(iter == NULL){
-    printf("NEXT IS NULL\n");
+  //  printf("NEXT\n");
+  if(iter->right == NULL){
+     printf("NEXT IS NULL\n");
     return NULL;
   }
   else{
     printf("NEXT IS NOT NULL\n");
-    //might be an issue??
-    if((iter->curr)->next != NULL){
+    iter->curr = iter->right;
+    iter->right = (iter->curr)->next;
+    return iter->curr->data;
+    /*    if((iter->curr)->next != NULL){
       return ((iter->curr)->next)->data;
-    }
-    else{
-      return NULL;
-    }
+      }*/
+    
+    
   }
 }
