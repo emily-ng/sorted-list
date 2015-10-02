@@ -65,11 +65,17 @@ int main(int argc, char**argv){
   SLInsert(list,ob1); 
     SLInsert(list,ob2);
     SLInsert(list,ob3);
+    // SLRemove(list,ob3);
    SLInsert(list,ob4);
     SLInsert(list,ob6);
     SLInsert(list,ob5);
-   SortedListIteratorPtr iter = SLCreateIterator(list);
-   SLNextItem(iter);
+     SLRemove(list,ob6);
+     SLRemove(list,ob4);
+     // SLRemove(list,ob4);
+    SortedListIteratorPtr iter = SLCreateIterator(list);
+    SortedListIteratorPtr iter2 = SLCreateIterator(list);
+    SortedListIteratorPtr iter3 = SLCreateIterator(list);
+    SLNextItem(iter2);
    Node *checker = malloc(sizeof(Node));                                                                                        
      checker = list->head;                                                                                                      
      while(checker!=NULL){                                                                                                      

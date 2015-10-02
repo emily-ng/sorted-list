@@ -39,8 +39,8 @@ int SLInsert(SortedListPtr list, void *newObj){
   new->next = NULL;
   new->data = newObj;
   new->refcount = 0;
-  Node* temp = malloc(sizeof(Node));
-
+  //  Node* temp = malloc(sizeof(Node));
+  Node* temp = NULL;
   printf("Input:  %d\n", *((int*)new->data));
 
   if(list->head==NULL){
@@ -97,8 +97,7 @@ int SLInsert(SortedListPtr list, void *newObj){
       printf("ADD TO END\n");
       return 1;
 
-    }
-       
+    }       
 
   }    
   
@@ -107,7 +106,35 @@ int SLInsert(SortedListPtr list, void *newObj){
 
 //TODO
 int SLRemove(SortedListPtr list, void *newObj){
- 
+  // Node* prev = malloc(sizeof(Node));
+  //Node* curr = malloc(sizeof(Node));
+  Node* prev = NULL;
+  Node* curr = NULL;
+  
+  /* if(list->cf(newObj,list->head->data)==0){
+      printf("FOUND A MATCH AT HEAD --REMOVE\n");
+      list->head = list->head->next;
+      return 1;
+      }*/
+  curr= list->head;
+  curr->next  = (list->head)->next;
+  prev=curr;
+
+  while(curr!=NULL){
+    if(list->cf(newObj,curr->data)==0){
+       if(curr==list->head){printf(
+       "THIS IS THE HEAD!\n");
+	list->head = curr->next;
+	}
+      printf("FOUND A MATCH IN LIST --REMOVE\n ");
+      curr->refcount--;
+      prev->next = curr->next;
+      return 1;
+    }  
+    prev = curr;
+    curr = curr->next;
+  }
+  printf("FAILED TO REMOVE\n");
   return 0; 
 }
 //TODO
