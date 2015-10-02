@@ -39,7 +39,6 @@ int SLInsert(SortedListPtr list, void *newObj){
   new->next = NULL;
   new->data = newObj;
   new->refcount = 0;
-  //  Node* temp = malloc(sizeof(Node));
   Node* temp = NULL;
   printf("Input:  %d\n", *((int*)new->data));
 
@@ -49,8 +48,6 @@ int SLInsert(SortedListPtr list, void *newObj){
     list->head = malloc(sizeof(Node));
     new->refcount++;
     list->head = new;
-    // (list->head)->refcount++;
-    //    printf("r:%d\n",(list->head)->refcount);
     return 1;
   }
  
@@ -88,8 +85,7 @@ int SLInsert(SortedListPtr list, void *newObj){
 	  //Next is greater, advance iterator
 	  //  printf("ADVANCE\n");
 	  temp = temp->next;
-	}
-	
+	}	
       }
       //Reaches end, less than rest of list
       new->refcount++;
@@ -104,7 +100,6 @@ int SLInsert(SortedListPtr list, void *newObj){
 }
 
 
-//TODO
 int SLRemove(SortedListPtr list, void *newObj){
   // Node* prev = malloc(sizeof(Node));
   //Node* curr = malloc(sizeof(Node));
@@ -128,19 +123,21 @@ int SLRemove(SortedListPtr list, void *newObj){
 	}
       printf("FOUND A MATCH IN LIST --REMOVE\n ");
       curr->refcount--;
+      printf("removed curr: %d  refcount: %d\n", *((int*)curr->data), curr->refcount );
       prev->next = curr->next;
       return 1;
     }  
     prev = curr;
     curr = curr->next;
   }
-  printf("FAILED TO REMOVE\n");
-  return 0; 
+  
+    printf("FAILED TO REMOVE\n");
+ 
+   return 0; 
 }
-//TODO
+
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
   if(list->head==NULL){
-    //    printf("list is empty; iter is NULL\n");
     return NULL;
   }
   else{
@@ -151,8 +148,7 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
     sp->curr = list->head;
     list->head->refcount++;
     sp->right = (list->head)->next;
-    //    printf("d: %d %d\n",*((int*)sp->curr->data),*((int*)sp->right->data));
-    printf("NOT EMPTY\n");
+    //    printf("NOT EMPTY\n");
     return sp;
   }
 }
@@ -179,11 +175,11 @@ void * SLGetItem( SortedListIteratorPtr iter ){
 //TODO
 void * SLNextItem(SortedListIteratorPtr iter){
   if(iter->right == NULL){
-    printf("NEXT IS NULL\n");
+    // printf("NEXT IS NULL\n");
     return NULL;
   }
   else{
-    printf("NEXT IS NOT NULL\n");
+    //printf("NEXT IS NOT NULL\n");
     iter->curr->refcount--;
     iter->curr = iter->right;
     iter->curr->refcount++;

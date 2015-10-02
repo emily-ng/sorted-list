@@ -5,9 +5,6 @@
 int compInts (void* a, void* b){
   int i = *(int*)a;
   int j = *(int*)b;
-  //  printf("size: %lu  %lu\n",sizeof(i),sizeof(a));
-  //  printf("p: %d  %d \n",*(int*)a,*(int*)b);
-  //   printf("%d\n",(i-j));
   return i-j;
 }
 
@@ -24,13 +21,13 @@ int compFloats (void* a, void* b){
   return (i-j);
 }
 
-void destroyer (void* a){
+void destruct (void* a){
   free(a);
 }
 
 int main(int argc, char**argv){
 
-  SortedListPtr list = SLCreate(compInts,destroyer);
+  SortedListPtr list = SLCreate(compInts,destruct);
 
   int k = 5;
   int* ob1 = malloc(sizeof(int*));
@@ -74,8 +71,9 @@ int main(int argc, char**argv){
      // SLRemove(list,ob4);
     SortedListIteratorPtr iter = SLCreateIterator(list);
     SortedListIteratorPtr iter2 = SLCreateIterator(list);
-    SortedListIteratorPtr iter3 = SLCreateIterator(list);
-    SLNextItem(iter2);
+    //  SortedListIteratorPtr iter3 = SLCreateIterator(list);
+   SLNextItem(iter2);
+
    Node *checker = malloc(sizeof(Node));                                                                                        
      checker = list->head;                                                                                                      
      while(checker!=NULL){                                                                                                      
@@ -93,7 +91,7 @@ int main(int argc, char**argv){
      }
   */
 
-  // SLDestroy(list);
+  SLDestroy(list);
 
   return 0;
 
