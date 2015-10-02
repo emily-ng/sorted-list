@@ -1,9 +1,19 @@
 /*
+ *Tim Goetjen
+ *Emily Ng
+ */
+
+/*
  * sorted-list.c
  */
 
 #include "sorted-list.h"
 
+/*
+ *Creates pointer to a new sorted list object
+ *returns sorted list pointer if created successfully
+ *returns NULL otherwise
+ */
 
 SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df){
   if(cf!=NULL&& df!=NULL){
@@ -18,6 +28,9 @@ SortedListPtr SLCreate(CompareFuncT cf, DestructFuncT df){
   }
 }
 
+/*
+ *Destroys sorted list, freeing allocated memory
+ */
 
 void SLDestroy(SortedListPtr list){
   Node* lh= list->head;
@@ -31,35 +44,37 @@ void SLDestroy(SortedListPtr list){
 }
 
 
-//TODO
-int SLInsert(SortedListPtr list, void *newObj){
-  printf("\n");
-  printf("NEW INSERT\n");
-  Node* new = malloc(sizeof(Node));
-  new->next = NULL;
-  new->data = newObj;
-  new->refcount = 0;
-  Node* temp = NULL;
-  printf("Input:  %d\n", *((int*)new->data));
+/*
+ *Function that inserts a node into list, excluding duplicates
+ *returns 1 when successful
+ *returns 0 when unsuccessful
+ */
 
+int SLInsert(SortedListPtr list, void *newObj){  
+  Node* temp = NULL;
+  printf("Input:  %d\n", *((int*)newObj));
+  //checks for empty list
   if(list->head==NULL){
-    printf("CREATE HEAD\n");
-    //pointer to new node
     list->head = malloc(sizeof(Node));
-    new->refcount++;
-    list->head = new;
+    list->head->refcount++;
+    list->head->data = newObj;
     return 1;
   }
  
-  //Checks comparator function for value 
+  //Checks when list is not empty
   else{
-    //AddToFront ---NEEDED
+    Node* new = malloc(sizeof(Node));
+    new->next = NULL;
+    //new->data = malloc(sizeof(int));
+    new->data = newObj;
+    new->refcount = 0;
+
+    //when item to add data is equal to data of head
     if( list->cf(new->data,(list->head)->data)==0  ){
-      printf("EQUAL to head\n");
       return 0;
     }
+    //when item to add data is greater than head data
     else if( list->cf(new->data,(list->head)->data)>0 ){
-      printf("GREATER THAN HEAD\n");
       new->next = list->head;
       new->refcount++;
       list->head = new;
@@ -68,29 +83,26 @@ int SLInsert(SortedListPtr list, void *newObj){
     else{
       temp = list->head;
       temp-> next = (list->head)->next;
+      
       while( temp->next!=NULL){
 	if( list->cf(new->data,(temp->next)->data)==0 ){
-	  printf("EQUAL to the next node from iter\n");
 	  return 0;
 	}
+	//new data greater than next
 	else if(list->cf(new->data,(temp->next)->data)>0){
-	  //new data greater than next
-	  printf("INSERT IN BETWEEN NODES\n");
 	  new->refcount++;
 	  new->next  = temp->next;
 	  temp->next = new;
 	  return 1;
 	}
+	//continue to traverse list
 	else{
-	  //Next is greater, advance iterator
-	  //  printf("ADVANCE\n");
 	  temp = temp->next;
 	}	
       }
-      //Reaches end, less than rest of list
+      
       new->refcount++;
       temp->next = new;	
-      printf("ADD TO END\n");
       return 1;
 
     }       
@@ -99,47 +111,59 @@ int SLInsert(SortedListPtr list, void *newObj){
   
 }
 
+/*
+ *Function that removes node from sorted list
+ *Returns 0 when fails
+ *Returns 1 when succeeds
+ */
 
 int SLRemove(SortedListPtr list, void *newObj){
-  // Node* prev = malloc(sizeof(Node));
-  //Node* curr = malloc(sizeof(Node));
   Node* prev = NULL;
   Node* curr = NULL;
-  
-  /* if(list->cf(newObj,list->head->data)==0){
-      printf("FOUND A MATCH AT HEAD --REMOVE\n");
-      list->head = list->head->next;
-      return 1;
-      }*/
+  Node* delete = NULL;  
+
   curr= list->head;
   curr->next  = (list->head)->next;
   prev=curr;
 
+  //traverses sorted list
   while(curr!=NULL){
+    //when node to be deleted is the head of list
     if(list->cf(newObj,curr->data)==0){
-       if(curr==list->head){printf(
-       "THIS IS THE HEAD!\n");
+      if(curr==list->head){
 	list->head = curr->next;
-	}
-      printf("FOUND A MATCH IN LIST --REMOVE\n ");
+      }
       curr->refcount--;
-      printf("removed curr: %d  refcount: %d\n", *((int*)curr->data), curr->refcount );
+      // printf("removed curr: %d  refcount: %d\n", *((int*)curr->data), curr->refcount );
+      //check refcount to see if node should be freed
+      if(curr->refcount==0){
+        delete = curr;
+      }
       prev->next = curr->next;
+      //node has 0 refcount, free it
+      if(delete!=NULL){
+	free(delete);
+      }
       return 1;
     }  
+    //continue traverse  
     prev = curr;
     curr = curr->next;
   }
-  
-    printf("FAILED TO REMOVE\n");
- 
-   return 0; 
+  //unsuccessful remove
+  return 0; 
 }
-
+/*
+ *Function used to create iterator as pointer to head of list
+ *Returns iterator when successful
+ *Returns NULL otherwise
+ */
 SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
+  //checks for empty list
   if(list->head==NULL){
     return NULL;
   }
+  //list is not empty
   else{
     SortedListIteratorPtr sp = malloc(sizeof(SortedListIteratorPtr));  
     sp->curr = malloc(sizeof(Node));
@@ -152,34 +176,47 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
     return sp;
   }
 }
-
+/*
+ *Function that destroys iterator object
+ *Frees memory allocated when iterator is created
+ */
 void SLDestroyIterator(SortedListIteratorPtr iter){
   iter->curr->refcount--;
-  free(iter->curr);
-  free(iter->right);
+  //  free(iter->curr);
+  //free(iter->right);
   free(iter);
 }
 
-//TODO
+/*
+ *Function that retrieves data at node that iterator currently points to
+ *Returns 0 when iter points to NULL
+ *Returns data when iter points to a node
+ */
 void * SLGetItem( SortedListIteratorPtr iter ){
+  //current node is NULL
   if(iter->curr==NULL){
-    printf("get NULL\n");
     return 0;
   }
+  //current node is not NULL
   else{
     printf("get item: %d\n", *((int*)(iter->curr)->data) );
     return (iter->curr)->data;
   }
 }
 
-//TODO
+/*
+ *Function that retrieves data of the next of the node that iter points to
+ *Also advances the iterator
+ *Returns NULL when the next is NULL
+ *Returns data when next node is no NULL
+ */
 void * SLNextItem(SortedListIteratorPtr iter){
   if(iter->right == NULL){
-    // printf("NEXT IS NULL\n");
     return NULL;
   }
+  //next node is not NULL
   else{
-    //printf("NEXT IS NOT NULL\n");
+    //advances iterator
     iter->curr->refcount--;
     iter->curr = iter->right;
     iter->curr->refcount++;

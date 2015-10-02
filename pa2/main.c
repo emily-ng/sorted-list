@@ -29,35 +29,23 @@ int main(int argc, char**argv){
 
   SortedListPtr list = SLCreate(compInts,destruct);
 
-  int k = 5;
   int* ob1 = malloc(sizeof(int*));
-  ob1= &k;
-  // *ob1 = k;
+  *ob1 = 5;
  
-  int j = 4;
   int* ob2 = malloc(sizeof(int));
-  ob2 = &j;
-  // *ob2 = j;
+   *ob2 = 4;
 
-  int m = 3;
   int* ob3 = malloc(sizeof(int));
-  ob3 = &m;
-  // *ob3 = m;
+  *ob3 = 3;
   
-  int n = 6;
   int* ob4 = malloc(sizeof(int));
-  ob4 = &n;
-  // *ob4 = n;
+  *ob4 = 6;
   
-  int o = 2;
   int* ob5 = malloc(sizeof(int));
-  ob5 = &o;
-  //*ob5 = o;
+  *ob5 = 1;
 
-  int q = 1;
   int* ob6 = malloc(sizeof(int));
-  ob6 = &q;
-  //  *ob6 = q;
+  *ob6 = 1;
 
   SLInsert(list,ob1); 
     SLInsert(list,ob2);
@@ -73,6 +61,8 @@ int main(int argc, char**argv){
     SortedListIteratorPtr iter2 = SLCreateIterator(list);
     //  SortedListIteratorPtr iter3 = SLCreateIterator(list);
    SLNextItem(iter2);
+   SLDestroyIterator(iter2);
+   SLDestroyIterator(iter);
 
    Node *checker = malloc(sizeof(Node));                                                                                        
      checker = list->head;                                                                                                      
