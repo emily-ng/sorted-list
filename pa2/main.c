@@ -8,16 +8,23 @@ int compInts (void* a, void* b){
   return i-j;
 }
 
-int compDoubles (void* a, void* b){
+/*int compDoubles (void* a, void* b){
   double i = *(double*)a;
   double j = *(double*)b;
 
   return (i-j);
-}
+  }*/
+
 int compFloats (void* a, void* b){
   float i = *(float*)a;
   float j = *(float*)b;
 
+  return (i-j);
+}
+
+int compChars(void* a, void* b){
+  char i = *(char*)a;
+  char j = *(char*)b;
   return (i-j);
 }
 
@@ -28,22 +35,22 @@ void destruct (void* a){
 int main(int argc, char**argv){
 
   SortedListPtr list = SLCreate(compInts,destruct);
-  int* ob1;
-  int* ob2;
-  int* ob3;
+  char* ob1;
+  char* ob2;
+  /*int* ob3;
   int* ob4;
   int* ob5;
   int* ob6;
- 
+  */
   SortedListIteratorPtr iter;
   SortedListIteratorPtr iter2;
  
-  ob1 = malloc(sizeof(int*));
-  *ob1 = 5;
- 
-  ob2 = malloc(sizeof(int));
-   *ob2 = 4;
-
+  ob1 = malloc(sizeof(float));
+  *ob1 = 'm';
+   
+  ob2 = malloc(sizeof(float));
+   *ob2 = 'n';
+   /*
    ob3 = malloc(sizeof(int));
   *ob3 = 3;
   
@@ -55,17 +62,20 @@ int main(int argc, char**argv){
 
   ob6 = malloc(sizeof(int));
   *ob6 = 1;
+  */
 
   SLInsert(list,ob1); 
-    SLInsert(list,ob2);
-    SLInsert(list,ob3);
+
+  SLInsert(list,ob2);
+
+  /*  SLInsert(list,ob3);
 
    SLInsert(list,ob4);
     SLInsert(list,ob6);
     SLInsert(list,ob5);
      SLRemove(list,ob6);
      SLRemove(list,ob4);
-
+  */
     iter = SLCreateIterator(list);
     iter2 = SLCreateIterator(list);
 
@@ -77,12 +87,12 @@ int main(int argc, char**argv){
    SLDestroyIterator(iter);
 
    free(ob1);
-   free(ob2);
+   /*   free(ob2);
    free(ob3);
    free(ob4);
    free(ob5);
    free(ob6);
-
+   */
   SLDestroy(list);
 
   return 0;

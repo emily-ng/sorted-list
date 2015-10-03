@@ -1,6 +1,7 @@
 /*
  *Tim Goetjen
  *Emily Ng
+ *CS214 Assignment 2
  */
 
 /*
@@ -226,7 +227,7 @@ void SLPrint(SortedListPtr list){
   Node *checker;
   checker = list->head;
   while(checker!=NULL){ 
-    printf("%d  ref:%d\n", *((int*)checker->data),checker->refcount );
+    printf("%c  ref:%d\n", *((char*)checker->data),checker->refcount );
     checker = checker->next;
   }
 
