@@ -155,4 +155,7 @@ void * SLGetItem( SortedListIteratorPtr iter );
 
 void * SLNextItem(SortedListIteratorPtr iter);
 
+/*Print list*/
+void SLPrint(SortedListPtr list);
+
 #endif
