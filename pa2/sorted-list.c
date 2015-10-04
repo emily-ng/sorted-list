@@ -37,6 +37,7 @@ void SLDestroy(SortedListPtr list){
   while(lh!=NULL){
     temp = lh;
     lh = lh->next;
+    list->df(temp->data);
     free(temp);
   }
   free(list);
@@ -119,6 +120,9 @@ int SLRemove(SortedListPtr list, void *newObj){
   Node* delete = NULL;  
 
   curr= list->head;
+  if(curr == NULL){ /*Remove from empty list fails*/
+    return 0;
+  }
   curr->next  = (list->head)->next;
   prev=curr;
 
@@ -201,11 +205,16 @@ void * SLGetItem( SortedListIteratorPtr iter ){
  *Function that retrieves data of the next of the node that iter points to
  *Also advances the iterator
  *Returns NULL when the next is NULL
- *Returns data when next node is no NULL
- */
+ *Returns data when next node is not NULL
+ *If the node the iterator points to is removed, this function will still continue the traverse,
+ *and will point the iterator to the next node of the removed node.
+ *If a node is inserted between the node the iterator points to and the next node,
+ *when the iterator is advanced it will point to the newly inserted node. 
+*/
 void * SLNextItem(SortedListIteratorPtr iter){  
   if(iter->curr->next == NULL){
-    return NULL;
+    iter->curr = NULL;
+    return iter->curr;
   }
   /*next node is not NULL*/
   else{
@@ -232,6 +241,7 @@ void SLPrintInts(SortedListPtr list){
       checker = checker->next;
     }
   }
+  printf("\n");
 }
 
 /*string print function*/
