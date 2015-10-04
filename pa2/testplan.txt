@@ -3,4 +3,5 @@ Emily Ng
 
 PA2 Test Plan
 
-We tested our program in main.c .
+
+

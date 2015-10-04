@@ -2,9 +2,7 @@
  *Tim Goetjen
  *Emily Ng
  *CS214 Assignment 2
- */
-
-/*
+ *
  * sorted-list.c
  */
 
@@ -68,7 +66,6 @@ int SLInsert(SortedListPtr list, void *newObj){
     /*new->data = malloc(sizeof(int));*/
     new->data = newObj;
     new->refcount = 0;
-
     /*when item to add data is equal to data of head*/
     if( list->cf(new->data,(list->head)->data)==0  ){
       return 0;
@@ -116,7 +113,6 @@ int SLInsert(SortedListPtr list, void *newObj){
  *Returns 0 when fails
  *Returns 1 when succeeds
  */
-
 int SLRemove(SortedListPtr list, void *newObj){
   Node* prev = NULL;
   Node* curr = NULL;
@@ -134,17 +130,19 @@ int SLRemove(SortedListPtr list, void *newObj){
 	list->head = curr->next;
       }
       curr->refcount--;
-      /* printf("removed curr: %d  refcount: %d\n", *((int*)curr->data), curr->refcount );*/
       /*check refcount to see if node should be freed*/
       if(curr->refcount==0){
         delete = curr;
       }
+
       prev->next = curr->next;
+
       /*node has 0 refcount, free it*/
       if(delete!=NULL){
+	list->df(delete->data);
 	free(delete);
       }
-      return 1;
+       return 1;
     }  
     /*continue traverse*/  
     prev = curr;
@@ -167,11 +165,10 @@ SortedListIteratorPtr SLCreateIterator(SortedListPtr list){
   else{
     SortedListIteratorPtr sp = malloc(sizeof(SortedListIteratorPtr));  
     sp->curr = malloc(sizeof(Node));
-    sp->right = malloc(sizeof(Node));
    
     sp->curr = list->head;
     list->head->refcount++;
-    sp->right = (list->head)->next;
+ 
     return sp;
   }
 }
@@ -206,29 +203,48 @@ void * SLGetItem( SortedListIteratorPtr iter ){
  *Returns NULL when the next is NULL
  *Returns data when next node is no NULL
  */
-void * SLNextItem(SortedListIteratorPtr iter){
-  if(iter->right == NULL){
+void * SLNextItem(SortedListIteratorPtr iter){  
+  if(iter->curr->next == NULL){
     return NULL;
   }
   /*next node is not NULL*/
   else{
     /*advances iterator*/
     iter->curr->refcount--;
-    iter->curr = iter->right;
+     iter->curr = iter->curr->next;
     iter->curr->refcount++;
-    iter->right = (iter->curr)->next;
+    /*    iter->right = (iter->curr)->next;*/
     return iter->curr->data;    
     
   }
 }
-/*added a print function*/
-void SLPrint(SortedListPtr list){
 
+/*integer print functions*/
+void SLPrintInts(SortedListPtr list){
   Node *checker;
   checker = list->head;
-  while(checker!=NULL){ 
-    printf("%c  ref:%d\n", *((char*)checker->data),checker->refcount );
-    checker = checker->next;
+  if(checker==NULL){
+    printf("empty list: nothing to print\n");
   }
+  else{
+    while(checker!=NULL){ 
+      printf("%d  ref:%d\n", *((int*)checker->data),checker->refcount );
+      checker = checker->next;
+    }
+  }
+}
 
+/*string print function*/
+void SLPrintStrings(SortedListPtr list){
+  Node *checker;
+  checker = list->head;
+  if(checker==NULL){
+    printf("empty list: nothing to print\n");
+  }
+  else{
+    while(checker!=NULL){ 
+      printf("%s  ref:%d\n", (char*)checker->data,checker->refcount );
+      checker = checker->next;
+    }
+  }
 }

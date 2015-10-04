@@ -6,6 +6,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 struct Node_{
   void* data;
@@ -32,7 +33,6 @@ typedef struct SortedList* SortedListPtr;
 
 struct SortedListIterator
 {
-  Node* right;
   Node* curr;
 };
 typedef struct SortedListIterator* SortedListIteratorPtr;
@@ -155,7 +155,10 @@ void * SLGetItem( SortedListIteratorPtr iter );
 
 void * SLNextItem(SortedListIteratorPtr iter);
 
-/*Print list*/
-void SLPrint(SortedListPtr list);
+/*Print int sorted list*/
+void SLPrintInts(SortedListPtr list);
+
+/*Print string sorted list*/
+void SLPrintStrings(SortedListPtr list);
 
 #endif

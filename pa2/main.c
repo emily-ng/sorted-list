@@ -8,13 +8,6 @@ int compInts (void* a, void* b){
   return i-j;
 }
 
-/*int compDoubles (void* a, void* b){
-  double i = *(double*)a;
-  double j = *(double*)b;
-
-  return (i-j);
-  }*/
-
 int compFloats (void* a, void* b){
   float i = *(float*)a;
   float j = *(float*)b;
@@ -28,6 +21,13 @@ int compChars(void* a, void* b){
   return (i-j);
 }
 
+int compStrings(void* a, void* b){
+  char* i = a;
+  char* j = b;
+
+  return strcmp(i,j);
+}
+
 void destruct (void* a){
   free(a);
 }
@@ -35,64 +35,62 @@ void destruct (void* a){
 int main(int argc, char**argv){
 
   SortedListPtr list = SLCreate(compInts,destruct);
-  char* ob1;
-  char* ob2;
-  /*int* ob3;
-  int* ob4;
-  int* ob5;
-  int* ob6;
-  */
+  int* ob1 = malloc(sizeof(int));
+  int* ob2 =  malloc(sizeof(int));
+  int* ob3 =  malloc(sizeof(int));
+  int* ob4 =  malloc(sizeof(int));
+  int* ob5 =  malloc(sizeof(int));
+  int* ob6 =  malloc(sizeof(int));
+
   SortedListIteratorPtr iter;
   SortedListIteratorPtr iter2;
  
-  ob1 = malloc(sizeof(float));
-  *ob1 = 'm';
-   
-  ob2 = malloc(sizeof(float));
-   *ob2 = 'n';
-   /*
-   ob3 = malloc(sizeof(int));
+  
+  *ob1 = 5;
+  *ob2 = 9;
   *ob3 = 3;
-  
-  ob4 = malloc(sizeof(int));
-  *ob4 = 6;
-  
-  ob5 = malloc(sizeof(int));
-  *ob5 = 1;
-
-  ob6 = malloc(sizeof(int));
-  *ob6 = 1;
-  */
+  *ob4 = 7;
+  *ob5 = 13;
+  *ob6 = 2;
 
   SLInsert(list,ob1); 
 
+
+  
   SLInsert(list,ob2);
 
-  /*  SLInsert(list,ob3);
+  SLInsert(list,ob4);
 
-   SLInsert(list,ob4);
-    SLInsert(list,ob6);
-    SLInsert(list,ob5);
-     SLRemove(list,ob6);
-     SLRemove(list,ob4);
-  */
-    iter = SLCreateIterator(list);
-    iter2 = SLCreateIterator(list);
+  SLInsert(list,ob5);
 
-   SLNextItem(iter2);
+  SLInsert(list,ob6);
+
+
+   iter = SLCreateIterator(list);
+   /* iter2 = SLCreateIterator(list);*/
+
+   SLNextItem(iter);
+
+   SLRemove(list,ob5);
+ 
+
+     SLNextItem(iter);
+
+
+   /*  SLDestroyIterator(iter);*/
+
+   SLPrintInts(list);
    
-   SLPrint(list);
-  
-   SLDestroyIterator(iter2);
-   SLDestroyIterator(iter);
+   /*   SLDestroyIterator(iter2);*/
+   /* SLDestroyIterator(iter);*/
 
    free(ob1);
-   /*   free(ob2);
+   free(ob2);
    free(ob3);
    free(ob4);
    free(ob5);
    free(ob6);
-   */
+  
   SLDestroy(list);
 
   return 0;
