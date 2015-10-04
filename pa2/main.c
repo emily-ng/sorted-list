@@ -35,6 +35,7 @@ void destruct (void* a){
 int main(int argc, char**argv){
 
   SortedListPtr list = SLCreate(compInts,destruct);
+  SortedListPtr list2 = SLCreate(compInts,destruct);
 
   int* ob1 = malloc(sizeof(int));
   int* ob2 =  malloc(sizeof(int));
@@ -64,6 +65,7 @@ int main(int argc, char**argv){
   iter = SLCreateIterator(list);
   /*Insert into empty list, SLInsert returns 1*/
   SLInsert(list,ob1);
+  iter = SLCreateIterator(list2);
   SLPrintInts(list);
   /*Remove only node (head), SLRemove returns 1*/
   SLRemove(list,ob1);
@@ -104,8 +106,9 @@ int main(int argc, char**argv){
   /*Next node of node that iterator points to is removed then SLNextItem called,
     iterator moves on to the node past the removed node.
     SLGetItem used to collect data from node iterator points to.*/
-  printf("Iter2 points to %d\n",*((int*)(SLGetItem(iter2))));
+
   SLNextItem(iter2);
+ printf("Iter2 points to %d\n",*((int*)(SLGetItem(iter2))));
   SLPrintInts(list);
   /*Node inserted after iterator and iterator advanced to that node*/
   SLInsert(list,ob9);
